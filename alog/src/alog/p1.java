@@ -1,10 +1,9 @@
 package alog;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 
 public class p1 {
 
@@ -16,47 +15,42 @@ public class p1 {
 
 	static int max = Integer.MAX_VALUE;
 
-//	1
-//	4 4
-//	0 0 0 0
-//	1 0 0 0
-//	0 0 1 0
-//	0 1 0 0
-
 	public static void main(String[] args) throws NumberFormatException, IOException {
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Scanner sc = new Scanner(System.in);
 
-		k = br.read();
-		xlength = br.read();
-		ylength = br.read();
+		k = sc.nextInt();
+		xlength = sc.nextInt();
+		ylength = sc.nextInt();
 
 		int x = xlength - 1;
 		int y = ylength - 1;
 
-		map = new int[xlength][ylength];
-		boolean visited[][][] = new boolean[xlength][ylength][k + 1];
+		map = new int[ylength][xlength];
+		boolean visited[][][] = new boolean[ylength][xlength][k + 1];
+
+		for (int i = 0; i < ylength; i++) {
+			for (int j = 0; j < xlength; j++) {
+				map[i][j] = sc.nextInt();
+			}
+		}
 
 		Queue<Node> q = new LinkedList<Node>();
 		q.add(new Node(0, 0, k, 0));
 
 		// 말폼 이동
-		int pattern1[][] = { { 2, 1 }, { 2, -1 }, { -2, 1 }, { -2, 1 }, { 1, 2 }, { 1, -2 }, { -1, 2 }, { -1, -2 } };
+		int pattern1[][] = { { 2, 1 }, { 2, -1 }, { -2, 1 }, { -2, -1 }, { 1, 2 }, { 1, -2 }, { -1, 2 }, { -1, -2 } };
 		// 원숭이폼 이동
-		int pattern2[][] = { { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, 1 } };
+		int pattern2[][] = { { 0, 1 }, { 0, -1 }, { -1, 0 }, { 1, 0 } };
 		visited[0][0][k] = true;
-		while (!q.isEmpty()) {
-			System.out.println(11);
-			Node d = q.poll();
 
+		while (!q.isEmpty()) {
+			Node d = q.poll();
+			// System.out.println(d);
 			if (d.x == x && d.y == y) {
 				max = Integer.min(max, d.count);
-				System.out.println(d.count);
+				// System.out.println(d.count);
 				break;
-			}
-
-			if (d.x == 1 && d.y == 1) {
-				continue;
 			}
 
 			// 말폼
@@ -66,11 +60,10 @@ public class p1 {
 					int ny = d.y + pattern1[i][1];
 					int nk = d.k - 1;
 
-					if (nx > 0 && ny > 0 && nx < xlength && ny < ylength) {
-						if (!visited[nx][ny][nk]) {
-							visited[nx][ny][nk] = true;
-							Node newNode = new Node(nx, nx, nk, d.count + 1);
-							q.add(newNode);
+					if (nx > -1 && ny > -1 && nx < xlength && ny < ylength && map[ny][nx] == 0) {
+						if (!visited[ny][nx][nk]) {
+							visited[ny][nx][nk] = true;
+							q.add(new Node(nx, ny, nk, d.count + 1));
 						}
 
 					}
@@ -79,22 +72,22 @@ public class p1 {
 
 			// 원숭이 폼
 			for (int i = 0; i < pattern2.length; i++) {
-				int nx = d.x + pattern1[i][0];
-				int ny = d.y + pattern1[i][1];
+				int nx = d.x + pattern2[i][0];
+				int ny = d.y + pattern2[i][1];
 				int nk = d.k;
 
-				if (nx > 0 && ny > 0 && nx < xlength && ny < ylength) {
-					if (!visited[nx][ny][nk]) {
-						visited[nx][ny][nk] = true;
-						Node newNode = new Node(nx, nx, nk, d.count + 1);
-						q.add(newNode);
+				if (nx > -1 && ny > -1 && nx < xlength && ny < ylength && map[ny][nx] == 0) {
+					// System.out.println(nx + " " + ny);
+					if (!visited[ny][nx][nk]) {
+						visited[ny][nx][nk] = true;
+						q.add(new Node(nx, ny, nk, d.count + 1));
 					}
 				}
 			}
 
 		}
 
-		System.out.println(max);
+		System.out.println(max == Integer.MAX_VALUE ? -1 : max);
 	}
 
 	static class Node {
@@ -114,18 +107,10 @@ public class p1 {
 		int count = 0;
 
 		@Override
-		public boolean equals(Object obj) {
-			if (super.equals(obj))
-				return true;
-			else {
-				Node d = (Node) obj;
-				if (d.x == this.x && d.y == this.y)
-					return true;
-				else
-					return false;
-
-			}
+		public String toString() {
+			return "Node [x=" + x + ", y=" + y + ", k=" + k + ", count=" + count + "]";
 		}
+
 	}
 
 }
