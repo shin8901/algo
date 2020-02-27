@@ -1,4 +1,4 @@
-package alog;
+package alog.monkey;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -12,8 +12,7 @@ public class p1 {
 	static int map[][];
 
 	static int k;
-
-	static int max = Integer.MAX_VALUE;
+	static int answer = -1;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 
@@ -22,6 +21,7 @@ public class p1 {
 			xlength = sc.nextInt();
 			ylength = sc.nextInt();
 
+			// endpoint
 			int x = xlength - 1;
 			int y = ylength - 1;
 
@@ -46,28 +46,14 @@ public class p1 {
 
 			while (!q.isEmpty()) {
 				Node d = q.poll();
-				// System.out.println(d);
 				if (d.x == x && d.y == y) {
-					max = Integer.min(max, d.count);
-					// System.out.println(d.count);
+					answer = d.count;
 					break;
 				}
 
 				// 말폼
 				if (d.k > 0) {
-					for (int i = 0; i < pattern1.length; i++) {
-						int nx = d.x + pattern1[i][0];
-						int ny = d.y + pattern1[i][1];
-						int nk = d.k - 1;
-
-						if (nx > -1 && ny > -1 && nx < xlength && ny < ylength && map[ny][nx] == 0) {
-							if (!visited[ny][nx][nk]) {
-								visited[ny][nx][nk] = true;
-								q.add(new Node(nx, ny, nk, d.count + 1));
-							}
-
-						}
-					}
+					move(visited, q, pattern1, d);
 				}
 
 				// 원숭이 폼
@@ -76,19 +62,33 @@ public class p1 {
 					int ny = d.y + pattern2[i][1];
 					int nk = d.k;
 
-					if (nx > -1 && ny > -1 && nx < xlength && ny < ylength && map[ny][nx] == 0) {
-						// System.out.println(nx + " " + ny);
-						if (!visited[ny][nx][nk]) {
-							visited[ny][nx][nk] = true;
-							q.add(new Node(nx, ny, nk, d.count + 1));
-						}
+					if (isCorrectPosition(visited, nx, ny, nk)) {
+						visited[ny][nx][nk] = true;
+						q.add(new Node(nx, ny, nk, d.count + 1));
 					}
 				}
 
 			}
 
-			System.out.println(max == Integer.MAX_VALUE ? -1 : max);
+			System.out.println(answer);
 		}
+	}
+
+	private static void move(boolean[][][] visited, Queue<Node> q, int[][] pattern1, Node d) {
+		for (int i = 0; i < pattern1.length; i++) {
+			int nx = d.x + pattern1[i][0];
+			int ny = d.y + pattern1[i][1];
+			int nk = d.k - 1;
+
+			if (isCorrectPosition(visited, nx, ny, nk)) {
+				visited[ny][nx][nk] = true;
+				q.add(new Node(nx, ny, nk, d.count + 1));
+			}
+		}
+	}
+
+	private static boolean isCorrectPosition(boolean[][][] visited, int nx, int ny, int nk) {
+		return nx > -1 && ny > -1 && nx < xlength && ny < ylength && map[ny][nx] == 0 && !visited[ny][nx][nk];
 	}
 
 	static class Node {

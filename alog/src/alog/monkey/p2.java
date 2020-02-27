@@ -1,4 +1,4 @@
-package alog;
+package alog.monkey;
 
 import java.util.LinkedList;
 import java.util.Scanner;
