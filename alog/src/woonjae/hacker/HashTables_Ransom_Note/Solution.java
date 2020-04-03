@@ -1,4 +1,4 @@
-package woonjae.hacker.twostring;
+package woonjae.hacker.HashTables_Ransom_Note;
 
 import java.util.HashMap;
 import java.util.Scanner;
