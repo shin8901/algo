@@ -1,0 +1,30 @@
+static List<Integer> freqQuery(List<List<Integer>> queries) {
+		List<Integer> answer = new ArrayList<>();
+
+		Map<Integer, Integer> map = new HashMap<>();
+		Map<Integer, Integer> countMap = new HashMap<>();
+		for (int i = 0; i < queries.size(); i++) {
+			int oper = queries.get(i).get(0);
+			int value = queries.get(i).get(1);
+
+			if (oper == 1) {
+				int prev = map.getOrDefault(value, 0);
+				int count = prev + 1;
+				map.put(value, count);
+				countMap.put(count, countMap.getOrDefault(count, 0) + 1);
+				if (prev > 0)
+					countMap.put(prev, countMap.getOrDefault(count, 1) - 1);
+			} else if (oper == 2) {
+				int prev = map.getOrDefault(value, 0);
+				if (prev == 0)
+					continue;
+				int count = prev - 1;
+				map.put(value, count);
+				countMap.put(prev, countMap.getOrDefault(prev, 1) - 1);
+			} else {
+				answer.add(countMap.getOrDefault(value, 0) > 0 ? 1 : 0);
+			}
+		}
+
+		return answer;
+	}
