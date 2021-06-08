@@ -1,4 +1,4 @@
-package woonjae.hacker.twoarray;
+package woonjae.hacker.array.twoarray;
 
 import static java.util.stream.Collectors.toList;
 

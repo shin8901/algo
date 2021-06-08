@@ -1,4 +1,4 @@
-package woonjae.hacker.left_rotate;
+package woonjae.hacker.array.left_rotate;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
