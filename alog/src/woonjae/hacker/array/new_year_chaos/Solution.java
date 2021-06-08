@@ -11,10 +11,6 @@ class Result {
 	 *
 	 * The function accepts INTEGER_ARRAY q as parameter.
 	 */
-	public static void 인출하기(List<Integer> q) {
-
-	}
-
 	public static void minimumBribes(List<Integer> q) {
 		// Write your code here
 
@@ -28,8 +24,7 @@ class Result {
 
 		for (int i = 0; i < q.size(); i++) {
 			if (i + 1 != q.get(i)) {
-				// same 위치
-				int tmpS = i + 1; // 원래 있어야할 값.
+				int tmpS = i + 1;
 				for (int j = i + 1; j < q.size(); j++) {
 					if (q.get(j) == tmpS) {
 						int tmp = q.get(j - 1);
